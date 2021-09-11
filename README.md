@@ -117,7 +117,7 @@ Will display array declare:
 ```
 If you type __"base16 -c -t Hello, world | clip"__, this ad will be stored to the clipboard immediately.  
 ___
- __base16 -sfx debug.log -o hello.bat__  
+ __base16 -sfx -o hello.bat -t Hello, world__  
 
 Will store encoded file debug.log into self-extracting batch file on the screen.  
 The content of batch file "hello.bat" looks like this:
