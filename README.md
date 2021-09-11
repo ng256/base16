@@ -66,42 +66,60 @@ base16 [-e|-d] [-s] [-delimiter char] [-prefix prefixstr] [-postfix postfixstr] 
 ## Examples of using.
 
  __base16 file1.txt__  
+
 Will display encoded data of file "file1.txt".
 ____
  __base16 file1.txt > file2.txt__  
+ or  
+ __base16 file1.txt -o file2.txt__  
+
 Will save encoded data from "file1.txt" to "file2.txt". 
 ____
  __base16 -s file1.txt -o file2.txt__  
-Saves encoded data from file "file1.txt" to output "file2.txt", separated by bytes.
+
+Will save encoded data from file "file1.txt" to output "file2.txt", separated by bytes.
 ____
  __echo Foo | base16 -s__  
+
 Will display: _46 6F 6F 20 0D 0A_.
 ____
  __echo Bar | base16 -s -prefix 0x -postfix ,__  
+
 Will display: _0x42, 0x61, 0x72, 0x20, 0x0D, 0x0A_.
 ____
  __base16 -t Helo, world!__  
+
 Will display: _48656C6C6F2C20776F726C6421_.
 ____
  __echo 42 61 72 | base16 -d__  
+ or  
+ __base16 -d -t 42 61 72__  
+
 Will display: _Bar_.
 ____
  __base16 -s -w 16 -l -delimiter ; test.txt__  
+
 Will display the encoded content of the file "test.txt" with a custom separator ";" between bytes.
 ____
- __type encoded.txt | base16 -d -o original.txt__  
-Output the decoded content of the file "encoded.txt" to a new file "original.txt".  
+ __type encoded.txt | base16 -d > original.txt__  
+or  
+ __base16 -d encoded.txt -o original.txt__  
+
+Outputs the decoded content of the file "encoded.txt" to a new file "original.txt".  
 ____
  __base16 -c -t Hello, world__  
+
 Will display array declare:  
-_{  
+```c
+{  
 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x2C, 0x77, 0x6F, 0x72, 0x6C, 0x64  
-}_  
-_
-If you type __base16 -c -t Hello, world | clip__, this ad will be stored to the clipboard immediately.  
+}  
+```
+If you type __"base16 -c -t Hello, world | clip"__, this ad will be stored to the clipboard immediately.  
 ___
  __base16 -sfx -o hello.bat -t Hello, world__  
-Output encoded text into self-extracting batch file on the screen.  
+
+Will store encoded text into self-extracting batch file on the screen.  
 The content of batch file "hello.bat" looks like this:
 
 ```cmd
@@ -120,5 +138,5 @@ The content of batch file "hello.bat" looks like this:
   
 48 65 6C 6C 6F 2C 20 77 6F 72 6C 64
 ```
-If you run "hello.bat", this script will ask for a filename and write "Hello world" to it.
+If you run "hello.bat", this script will ask for a filename and write "Hello, world" to it.
 ____
