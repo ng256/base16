@@ -88,15 +88,25 @@ The content on the screen of batch file looks like this:
 ____________________________________________________________________
   :BEGIN
   @ECHO OFF
+  
   SET /P filename="Enter filename: "
+  
   SET tmpfile=%~d0%~p0%RANDOM%.tmp
+  
   SET outfile=%~d0%~p0%filename%
+  
   ECHO tmpfile = %tmpfile%
+  
   ECHO outfile = %outfile%
+  
   FINDSTR "^[0-9A-F][0-9A-F][^\s]" %0 > "%tmpfile%"
+  
   certutil -decodehex "%tmpfile%" "%outfile%"
+  
   TIMEOUT 3
+  
   DEL /F /Q "%tmpfile%" %0
+  
   EXIT
 
 48 65 6C 6C 6F 2C 20 77 6F 72 6C 64
