@@ -105,7 +105,7 @@ ____
 or  
  __base16 -d encoded.txt -o original.txt__  
 
-Outputs the decoded content of the file "encoded.txt" to a new file "original.txt".  
+Will output the decoded content of the file "encoded.txt" to a new file "original.txt".  
 ____
  __base16 -c -t Hello, world__  
 
