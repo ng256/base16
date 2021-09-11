@@ -17,6 +17,7 @@ __Base16_Source.zip__        Contains __base16.cs__ source code file for you to 
 :heavy_check_mark: Encode data.  
 :heavy_check_mark: Decode hex dumps.  
 :heavy_check_mark: Read files, text input or redirected output from console apps.  
+:heavy_check_mark: Write result to file or console window.
 
 # Usage.
 
