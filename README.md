@@ -93,14 +93,16 @@ ____
 Output the decoded content of the file "encoded.txt" to a new file "original.txt".  
 ____
  __base16 -c -t Hello, world__  
-Will display:  
+Will display array declare:  
 _{  
 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x2C, 0x77, 0x6F, 0x72, 0x6C, 0x64  
 }_  
-____
- __base16 -sfx -t Hello, world__  
+_
+If you type __base16 -c -t Hello, world | clip__, this ad will be stored to the clipboard immediately.  
+___
+ __base16 -sfx -o hello.bat -t Hello, world__  
 Output encoded text into self-extracting batch file on the screen.  
-The content on the screen of batch file looks like this:
+The content of batch file "hello.bat" looks like this:
 
 ```cmd
   :BEGIN  
@@ -118,4 +120,5 @@ The content on the screen of batch file looks like this:
   
 48 65 6C 6C 6F 2C 20 77 6F 72 6C 64
 ```
+If you run "hello.bat", this script will ask for a filename and write "Hello world" to it.
 ____
