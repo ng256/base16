@@ -23,7 +23,7 @@ __Base16_Source.zip__        Contains __base16.cs__ source code file for you to 
 
 This utility must be called from the command line with the specified arguments:  
 
-base16 [-e|-d] [-s] [-delimiter char] [-prefix prefixstr] [-postfix postfixstr] [-l] [-w width] [-sfx] [-c] [-o outfile] [-f] file1 [file2...] [-t text]
+base16 [-e|-d] [-s] [-delimiter char] [-prefix prefixstr] [-postfix postfixstr] [-l] [-w width] [-sfx] [-c] [-o outfile] [-f] file1 [file2...] [-t text] [-i]
 
 ## Program operation mode.
 
@@ -58,10 +58,12 @@ base16 [-e|-d] [-s] [-delimiter char] [-prefix prefixstr] [-postfix postfixstr] 
 
  __{file1} {file2} ...__     Input files containing data to be encoded.
 
- __-f|-file {value as file name}__        Force use value as input filename (to escape parameters). If input files is omitted, program's input will be redirected to the standard input.
+ __-f|-file {value as file name}__        Force use value as input filename (to escape parameters).  
+If input files is omitted, program's input will be redirected to the standard input. Instead of a file name, you can specify a directory and file mask to search for files.  
 
- __-t|-text {text for encoding/decoding}__        Use typed text value instead of input.
-
+ __-t|-text {text for encoding/decoding}__        Use typed text value instead of input. This stuff should be after all other arguments.  
+ 
+ __-i|-input__				           Read data from standard input device until Ctrl+C pressed. All listed files or key -t will be ignored.
 
 
 ## Examples of using.
@@ -88,9 +90,12 @@ ____
 
 Will display: _0x42, 0x61, 0x72, 0x20, 0x0D, 0x0A_.
 ____
- __base16 -t Helo, world!__  
+ __base16 -t Hello, world!__  
 
 Will display: _48656C6C6F2C20776F726C6421_.
+____
+ __base16 -i__  
+Will input data from the keyboard and encode it.
 ____
  __echo 42 61 72 | base16 -d__  
  or  
