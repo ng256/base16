@@ -1,6 +1,6 @@
 # Description.
 
-__Base16 Encoding Utility__ is a small but useful console application for MS Windows operating system that allows you to convert your data using Base16 encoding and provides additional tools to manage the formatting of the hex dump output. Application input can be obtained from files, command line, or by redirecting output from another console application.  
+__Base16 Encoding Utility__ is a small but useful console application for MS Windows operating system that allows you to convert your data using Base16 encoding and provides additional tools to manage the formatting of the hex dump output. Application input can be obtained from files, command line, keyboard or by redirecting output from another console application.  
 The Base16 algorithm provides encoding in such a way that each byte of data is split into two 4-bit values and represented by two hexadecimal digits.  
 Also, this utility can restore the original data from text containing a hex dump.
 
