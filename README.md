@@ -36,7 +36,7 @@ base16 [-e|-d] [-s] [-delimiter char] [-prefix prefixstr] [-postfix postfixstr] 
 
  __-s|-space__               Group bytes in the output with spaces.
 
- __-delimiter {char}__       Use the specified delimiter char instead spaces. Used only with the -s key.
+ __-delimiter {char}__       Use the specified delimiter char instead spaces. Can be used instead -s key.
 
  __-prefix {string}__        Use the specified prefix string for every byte.
 
