@@ -1,6 +1,4 @@
 
-# Screenshot.
-![Screenshot1](https://a.fsdn.com/con/app/proj/base16/screenshots/base16.jpg/max/max/1 "Screenshot")
 # Description.
 
 __Base16 Encoding Utility__ is a small but useful console application for MS Windows operating system that allows you to convert your data using Base16 encoding and provides additional tools to manage the formatting of the hex dump output. Application input can be obtained from files, command line, keyboard or by redirecting output from another console application.  
@@ -21,6 +19,10 @@ __Base16_Source.zip__        contains __base16.cs__ source code file for you to 
 :heavy_check_mark: Decode hex dumps.  
 :heavy_check_mark: Read files, text input or redirected output from console apps.  
 :heavy_check_mark: Write result to file or console window.
+
+## Screenshots.
+![Screenshot1](https://a.fsdn.com/con/app/proj/base16/screenshots/base16.jpg/max/max/1 "Screenshot")
+![Screenshot1](https://a.fsdn.com/con/app/proj/base16/screenshots/base16-1856.jpg/max/max/1 "Screenshot")
 
 # Usage.
 
