@@ -1,3 +1,6 @@
+
+# Screenshot.
+![Screenshot1](https://a.fsdn.com/con/app/proj/base16/screenshots/base16.jpg/max/max/1 "Screenshot")
 # Description.
 
 __Base16 Encoding Utility__ is a small but useful console application for MS Windows operating system that allows you to convert your data using Base16 encoding and provides additional tools to manage the formatting of the hex dump output. Application input can be obtained from files, command line, keyboard or by redirecting output from another console application.  
@@ -26,44 +29,36 @@ This utility must be called from the command line with the specified arguments:
 base16 [-e|-d] [-s] [-delimiter char] [-prefix prefixstr] [-postfix postfixstr] [-l] [-w width] [-sfx] [-c] [-o outfile] [-f] file1 [file2...] [-t text] [-i]
 
 ## Program operation mode.
-
- __-e__                      Encode data. This is default choise.
-
- __-d__                      Decode data.
+ |Key     |Specification                                              |
+ |-------:|-----------------------------------------------------------|
+ | __-e__ | Encode data. This is default choise.                      |  
+ | __-d__ | Decode data.                                              |  
 
 
 ## Parameters that are used only for encoding.
 
- __-s|-space__               Group bytes in the output with spaces.
-
- __-delimiter {char}__       Use the specified delimiter char instead spaces. Can be used instead -s key.
-
- __-prefix {string}__        Use the specified prefix string for every byte.
-
- __-postfix {string}__       Use the specified postfix string for every byte except the last item.
-
- __-l|-lcase__               Convert output to lowercase.
-
- __-w|-wrap {width}__        Split the specified number of characters into lines. A value of this parameter less than 2 will be ignored. By default, the output will not wrap.
-
- __-sfx__                    Write a special command lines before the encoded data to create a self-extracting batch file. Items such as -s, -prefix, -postfix and -delimiter will be ignored.
-
- __-c__                      Create an array declaration for a C-like language. Items such as -s, -prefix, -postfix and -delimiter will be ignored.
+ |Key                              |Specification|
+ |------:|-------------------------|
+ | __-s__ _or_ __-space__          | Group bytes in the output with spaces. |
+ | __-delimiter&#160;{char}__      | Use the specified delimiter char instead spaces. Can be used instead -s key. |
+ | __-prefix&#160;{string}__       | Use the specified prefix string for every byte. |
+ | __-postfix&#160;{string}__      | Use the specified postfix string for every byte except the last item. |
+ | __-l__ _or_ __-lcase__          | Convert output to lowercase. |
+ | __-w&#160;{width}__ _or_ __-wrap&#160;{width}__ |  Split the specified number of characters into lines. A value of this parameter less than 2 will be ignored. By default, the output will not wrap. |
+ | __-sfx__                        | Write a special command lines before the encoded data to create a self-extracting batch file. Items such as -s, -prefix, -postfix and -delimiter will be ignored. |
+ | __-c__                          | Create an array declaration for a C-like language. Items such as -s, -prefix, -postfix and -delimiter will be ignored. |
 
 
 
 ## Configuring input and output.
 
- __-o|-output {outfile}__    Set output to file {outfile}. If parameter is omitted, program's output will be redirected to the console window.
-
- __{file1} {file2} ...__     Input files containing data to be encoded.
-
- __-f|-file {value as file name}__        Force use value as input filename (to escape parameters).  
-If input files is omitted, program's input will be redirected to the standard input. Instead of a file name, you can specify a directory and file mask to search for files.  
-
- __-t|-text {text for encoding/decoding}__        Use typed text value instead of input. This stuff should be after all other arguments.  
- 
- __-i|-input__				           Read data from standard input device until Ctrl+C pressed. All listed files or key -t will be ignored.
+ |Key|Specification|
+ |------:|--------------------------           |
+ | __-o__ _or_ __-output&#160;{outfile}__           | Set output to file {outfile}. If parameter is omitted, program's output will be redirected to the console window. |
+ | __{file1}&#160;{file2} ...__                     | Input files containing data to be encoded.
+ | __-f&#160;{value&#160;as&#160;file&#160;name}__ _or_ __-file&#160;{value&#160;as&#160;file&#160;name}__  | Force use value as input filename (to escape parameters). If input files is omitted, program's input will be redirected to the standard input. Instead of a file name, you can specify a directory and file mask to search for files. | 
+ | __-t&#160;{text&#160;for&#160;encoding/decoding}__ _or_ __-text&#160;{text&#160;for&#160;encoding/decoding}__ |       Use typed text value instead of input. This stuff should be after all other arguments. |
+ | __-i__ _or_ __-input__	|			           Read data from standard input device until Ctrl+C pressed. All listed files or key -t will be ignored. |
 
 
 ## Examples of using.
