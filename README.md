@@ -28,7 +28,7 @@ __Base16_Source.zip__        contains __base16.cs__ source code file for you to 
 
 This utility must be called from the command line with the specified arguments:  
 
-base16 [-e|-d] [-s] [-delimiter char] [-prefix prefixstr] [-postfix postfixstr] [-l] [-w width] [-sfx] [-c] [-o outfile] [-f] file1 [file2...] [-t text] [-i]
+base16 [-e|-d] [-s] [-delimiter char] [-prefix prestr] [-postfix poststr]  [-header hstr] [-footer fstr] [-l] [-w width] [-sfx] [-c] [-o outfile] [-f] file1 [file2...] [-t text] [-i]
 
 ## Program operation mode.
  |Key     |Specification                                              |
@@ -43,12 +43,16 @@ base16 [-e|-d] [-s] [-delimiter char] [-prefix prefixstr] [-postfix postfixstr] 
  |------:|-------------------------|
  | __-s__ _or_ __-space__          | Group bytes in the output with spaces. |
  | __-delimiter&#160;{char}__      | Use the specified delimiter char instead spaces. Can be used instead -s key. |
- | __-prefix&#160;{string}__       | Use the specified prefix string for every byte. |
- | __-postfix&#160;{string}__      | Use the specified postfix string for every byte except the last item. |
+ | __-prefix&#160;{string}__       | Use the specified prefix string for every byte. This parameter is sensitive to escape characters. |
+ | __-postfix&#160;{string}__      | Use the specified postfix string for every byte except the last item. This parameter is sensitive to escape characters. |
+ | __-header&#160;{string}__       | Use the specified header string before output data. This parameter is sensitive to escape characters. |
+ | __-footer&#160;{string}__       | Use the specified footer string after output data. This parameter is sensitive to escape characters. |
  | __-l__ _or_ __-lcase__          | Convert output to lowercase. |
  | __-w&#160;{width}__ _or_ __-wrap&#160;{width}__ |  Split the specified number of characters into lines. A value of this parameter less than 2 will be ignored. By default, the output will not wrap. |
  | __-sfx__                        | Write a special command lines before the encoded data to create a self-extracting batch file. Items such as -s, -prefix, -postfix and -delimiter will be ignored. |
  | __-c__                          | Create an array declaration for a C-like language. Items such as -s, -prefix, -postfix and -delimiter will be ignored. |
+ | __-cs__                         | Create an array declaration for a C# language. Items such as -s, -prefix, -postfix and -delimiter will be ignored. |
+ | __-vb__                         | Create an array declaration for a Visual Basic language. Items such as -s, -prefix, -postfix and -delimiter will be ignored. |
 
 
 
@@ -114,6 +118,7 @@ ____
 
 Will display array declare:  
 ```c
+unsigned char[]
 {  
 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x2C, 0x77, 0x6F, 0x72, 0x6C, 0x64  
 }  
