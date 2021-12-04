@@ -153,27 +153,6 @@ namespace Base16
                 _baseStream.SetLength(value);
             }
 
-            // Following 2 methods were manually inlined.
-            // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            /*private char GetHexChar(int h)
-            {
-                if (h < 10) return (char) (h + 0x30);
-                return (char) (_lcase ?  h + 0x57 :  h + 0x37);
-            }*/
-            // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            /*private int ReadNextDigit()
-            {
-                int r;
-                while ((r = _reader.Read()) >= 0)
-                {
-                    if (r > 0x2F && r < 0x3A) return r - 0x30;
-                    if (r > 0x40 && r < 0x47) return r - 0x37;
-                    if (r > 0x60 && r < 0x67) return r - 0x57;
-                }
-
-                return -1;
-            }*/
-
             public override int Read(byte[] buffer, int offset, int count)
             {
                 if (!CanRead) throw new NotSupportedException();
@@ -191,12 +170,6 @@ namespace Base16
                     else if (digit > 0x40 && digit < 0x47) @byte += digit - 0x37;
                     else if (digit > 0x60 && digit < 0x67) @byte += digit - 0x57;
                     else break;
-
-                    /*int digit = ReadNextDigit();
-                    if (digit >= 0) @byte = digit << 4; else break;
-                    digit = ReadNextDigit();
-                    if (digit >= 0) @byte += digit; else break;*/
-
                     length++;
                     buffer[i] = unchecked((byte)@byte);
                 }
@@ -231,9 +204,6 @@ namespace Base16
                     half = b % 16;
                     digit = half < 10 ? (char) (half + 0x30) : (char) (_lcase ? half + 0x57 : half + 0x37);
                     sb.Append(digit);
-
-                    /*sb.Append(GetHexChar(b / 16));
-                    sb.Append(GetHexChar(b % 16));*/
 
                     _linePosition += 2;
 
