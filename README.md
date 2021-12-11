@@ -5,6 +5,16 @@ __Base16 Encoding Utility__ is a small but useful console application for MS Win
 The Base16 algorithm provides encoding in such a way that each byte of data is split into two 4-bit values and represented by two hexadecimal digits.  
 Also, this utility can restore the original data from text containing a hex dump.
 
+## Contents.
+1. [System requirements.](#system-requirements)
+2. [Features.](#features)
+3. [Screenshots.](#screenshots)
+4. [Usage.](#usage)
+    - [Program operation mode.](program-operation-mode)
+    - [Parameters that are used only for encoding.](#parameters-that-are-used-only-for-encoding)
+    - [Configuring input and output.](#configuring-input-and-output)
+    - [Examples.](#examples)
+
 ## System requirements.
 Microsoft Windows XP (or later) operating system with Microsoft .NET Framework 4.0 installed.
 
@@ -20,20 +30,20 @@ Microsoft Windows XP (or later) operating system with Microsoft .NET Framework 4
 ![Screenshot1](https://a.fsdn.com/con/app/proj/base16/screenshots/base16.jpg/max/max/1 "Screenshot")
 ![Screenshot1](https://a.fsdn.com/con/app/proj/base16/screenshots/base16-1856.jpg/max/max/1 "Screenshot")
 
-# Usage.
+## Usage.
 
 This utility must be called from the command line with the specified arguments:  
 
 base16 [-e|-d] [-s] [-delimiter char] [-prefix prestr] [-postfix poststr]  [-header hstr] [-footer fstr] [-l] [-w width] [-sfx] [-c] [-o outfile] [-f] file1 [file2...] [-t text] [-i]
 
-## Program operation mode.
+### Program operation mode.  
  |Key     |Specification                                              |
  |-------:|-----------------------------------------------------------|
  | __-e__ | Encode data. This is default choise.                      |  
  | __-d__ | Decode data.                                              |  
 
 
-## Parameters that are used only for encoding.
+### Parameters that are used only for encoding.  
 
  |Key                              |Specification|
  |------:|-------------------------|
@@ -52,7 +62,7 @@ base16 [-e|-d] [-s] [-delimiter char] [-prefix prestr] [-postfix poststr]  [-hea
 
 
 
-## Configuring input and output.
+### Configuring input and output.  
 
  |Key|Specification|
  |------:|--------------------------           |
@@ -63,7 +73,7 @@ base16 [-e|-d] [-s] [-delimiter char] [-prefix prestr] [-postfix poststr]  [-hea
  | __-i__ _or_ __-input__	|			           Read data from standard input device until Ctrl+C pressed. All listed files or key -t will be ignored. |
 
 
-## Examples of using.
+### Examples.  
 
  __base16 file1.txt__  
 
@@ -143,4 +153,5 @@ The content of batch file "hello.bat" looks like this:
 48 65 6C 6C 6F 2C 20 77 6F 72 6C 64
 ```
 If you run "hello.bat", this script will ask for a filename and write "Hello, world" to it.
-____
+_____
+[↑ Back to contents.](#contents)
