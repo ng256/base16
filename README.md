@@ -120,14 +120,16 @@ or
 
 Will output the decoded content of the file "encoded.txt" to a new file "original.txt".  
 ____
- __base16 -c -t Hello, world__  
+ __base16 -c bytes -t Hello, world__
 
 Will display array declare:  
 ```c
-unsigned char[]
-{  
-0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x2C, 0x77, 0x6F, 0x72, 0x6C, 0x64  
-}  
+unsigned char *bytes = unsigned char[]
+{
+0x73, 0x20, 0x2D, 0x74, 0x20, 0x48, 0x65, 0x6C,
+0x6C, 0x6F, 0x2C, 0x20, 0x77, 0x6F, 0x72, 0x6C,
+0x64
+}
 ```
 If you type __"base16 -c -t Hello, world | clip"__, this ad will be stored to the clipboard immediately.  
 ___
