@@ -8,11 +8,6 @@ Also, this utility can restore the original data from text containing a hex dump
 ## System requirements.
 Microsoft Windows XP (or later) operating system with Microsoft .NET Framework 4.0 installed.
 
-## Contents.
-__Base16_Install.zip__       contains the installer that copies the __base16.exe__ file to the Program Files folder and adds the installed path to %PATH% environment variable. You must restart your computer after installation for the changes to take effect.   
-__Base16_Standalone.zip__    contains only __base16.exe__ executable file and __readme.txt__ document.  
-__Base16_Source.zip__        contains __base16.cs__ source code file for you to download and modify as you see fit.  
-
 ## Features.
 
 :heavy_check_mark: Encode data.  
