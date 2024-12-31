@@ -12,16 +12,21 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#include <io.h>
+#define NEWLINE "\r\n"
 #else
 #include <sys/ioctl.h>
 #include <unistd.h>
+#define NEWLINE "\n"
 #endif
+
+#define STRLINE(str) (std::string(str) + NEWLINE)
 
 // Constants
 const int DEFAULT_CONSOLE_WIDTH = 80;
 const int HEX_BYTE_LENGTH = 2;
 const int SEPARATOR_LENGTH = 1;
-const std::string VERSION = "0.1a";
+const std::string VERSION = "1.0a";
 
 // Structure to hold parameters for encoding/decoding
 struct Parameters {
@@ -37,6 +42,14 @@ struct Parameters {
     int max_chars; // Maximum number of characters per line
     std::string file_extension; // File extension for output
 };
+
+bool is_stdin_redirected() {
+#ifdef _WIN32
+    return _isatty(_fileno(stdin)) == 0;
+#else
+    return isatty(fileno(stdin)) == 0;
+#endif
+}
 
 // Function to print messages with line wrapping and handling of non-breaking spaces
 void print_message(std::ostream& output, const std::string& message, int max_line_length) {
@@ -83,7 +96,7 @@ void print_separator_line(std::ostream& output, int max_chars) {
 
 // Function to print help message
 void print_help(const std::string& program_name, int max_line_length) {
-    print_message(std::cout, program_name + " v. " + VERSION, max_line_length);
+    print_message(std::cout, program_name + " ver. " + VERSION, max_line_length);
     print_message(std::cout, "Copyright (C) 2024 Pavel_Bashkardin", max_line_length);
     print_message(std::cout, "Description:", max_line_length);
     print_message(std::cout, "The BASE16 program is a command-line utility for encoding and decoding data in hex (hexadecimal) format. It supports various parameters and keys for configuring the encoding and decoding process, as well as formatting the output in different programming languages.", max_line_length);
@@ -167,19 +180,19 @@ void encode(std::istream& input, std::ostream& output, const Parameters& params)
         is_last_byte = input.peek() == EOF;
 
         // Output the byte in hexadecimal format with the specified prefix, postfix, and separator
-        output << params.prefix << std::hex << std::setw(HEX_BYTE_LENGTH) << std::setfill('0') << (params.upper_case ? std::uppercase : std::nouppercase) << static_cast<int>(static_cast<unsigned char>(byte)) << params.postfix;
+        output << params.prefix << std::hex << std::setw(HEX_BYTE_LENGTH) << std::setfill('0') << (params.upper_case ? std::uppercase : std::nouppercase) << static_cast<int>(static_cast<unsigned char>(byte));
 
-        // Add separator if not the last byte and not the last column
+        // Add postfix and separator if not the last byte and not the last column
         if (!is_last_byte || !params.suppress_last_postfix) {
             if (params.separator && column_count < params.max_columns - 1) {
-                output << params.separator;
+                output << params.postfix << params.separator;
             }
         }
 
         column_count++;
 
         // Add a newline if the maximum number of columns is reached
-        if (column_count == params.max_columns && !is_last_byte) {
+        if (params.max_columns > 0 && column_count == params.max_columns && !is_last_byte) {
             output << std::endl;
             column_count = 0;
         }
@@ -234,7 +247,7 @@ void decode(std::istream& input, std::ostream& output, const Parameters& params)
 // Function to handle input and determine whether to encode or decode
 void handle_input(std::istream& input, std::ostream& output, const Parameters& params) {
     if (!params.header.empty()) {
-        output << params.header << std::endl;
+        output << params.header;// << std::endl;
     }
 
     // Determine whether to encode or decode based on the encode_mode flag
@@ -245,8 +258,10 @@ void handle_input(std::istream& input, std::ostream& output, const Parameters& p
     }
 
     if (!params.footer.empty()) {
-        output << params.footer << std::endl;
+        output << params.footer;
     }
+    
+    output << std::endl;
 }
 
 // Signal handler for interactive mode
@@ -262,8 +277,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "const unsigned char data[] = {";
-        params.footer = "};";
+        params.header = STRLINE("const unsigned char data[] = {");
+        params.footer = STRLINE("};");
         params.suppress_last_postfix = true;
         params.file_extension = ".c";
     } else if (lang == "cpp") {
@@ -271,8 +286,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "const std::vector<unsigned char> data = {";
-        params.footer = "};";
+        params.header = STRLINE("const std::vector<unsigned char> data = {");
+        params.footer = STRLINE("};");
         params.suppress_last_postfix = true;
         params.file_extension = ".cpp";
     } else if (lang == "cs") {
@@ -280,8 +295,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "byte[] data = new byte[] {";
-        params.footer = "};";
+        params.header = STRLINE("byte[] data = new byte[] {");
+        params.footer = STRLINE("};");
         params.suppress_last_postfix = true;
         params.file_extension = ".cs";
     } else if (lang == "vb") {
@@ -289,8 +304,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "&H";
         params.postfix = ",";
-        params.header = "Dim data As Byte() = {";
-        params.footer = "}";
+        params.header = STRLINE("Dim data As Byte() = {");
+        params.footer = STRLINE("}");
         params.suppress_last_postfix = true;
         params.file_extension = ".vb";
     } else if (lang == "py") {
@@ -298,8 +313,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "data = bytes([";
-        params.footer = "])";
+        params.header = STRLINE("data = bytes([");
+        params.footer = STRLINE("])");
         params.suppress_last_postfix = true;
         params.file_extension = ".py";
     } else if (lang == "asm") {
@@ -307,7 +322,7 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "data db ";
+        params.header = STRLINE("data db ");
         params.footer = "";
         params.suppress_last_postfix = true;
         params.file_extension = ".asm";
@@ -316,8 +331,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "var data = []byte{";
-        params.footer = "}";
+        params.header = STRLINE("var data = []byte{");
+        params.footer = STRLINE("}");
         params.suppress_last_postfix = true;
         params.file_extension = ".go";
     } else if (lang == "rs") {
@@ -325,8 +340,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "let data: [u8; N] = [";
-        params.footer = "];";
+        params.header = STRLINE("let data: [u8; N] = [");
+        params.footer = STRLINE("];");
         params.suppress_last_postfix = true;
         params.file_extension = ".rs";
     } else if (lang == "swift") {
@@ -334,8 +349,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "let data: [UInt8] = [";
-        params.footer = "]";
+        params.header = STRLINE("let data: [UInt8] = [");
+        params.footer = STRLINE("]");
         params.suppress_last_postfix = true;
         params.file_extension = ".swift";
     } else if (lang == "kt") {
@@ -343,8 +358,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "val data = byteArrayOf(";
-        params.footer = ")";
+        params.header = STRLINE("val data = byteArrayOf(");
+        params.footer = STRLINE(")");
         params.suppress_last_postfix = true;
         params.file_extension = ".kt";
     } else if (lang == "java") {
@@ -352,8 +367,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "byte[] data = new byte[] {";
-        params.footer = "};";
+        params.header = STRLINE("byte[] data = new byte[] {");
+        params.footer = STRLINE("};");
         params.suppress_last_postfix = true;
         params.file_extension = ".java";
     } else if (lang == "dart") {
@@ -361,8 +376,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "List<int> data = [";
-        params.footer = "];";
+        params.header = STRLINE("List<int> data = [");
+        params.footer = STRLINE("];");
         params.suppress_last_postfix = true;
         params.file_extension = ".dart";
     } else if (lang == "js") {
@@ -370,8 +385,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "const data = [";
-        params.footer = "];";
+        params.header = STRLINE("const data = [");
+        params.footer = STRLINE("];");
         params.suppress_last_postfix = true;
         params.file_extension = ".js";
     } else if (lang == "ts") {
@@ -379,8 +394,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "const data: number[] = [";
-        params.footer = "];";
+        params.header = STRLINE("const data: number[] = [");
+        params.footer = STRLINE("];");
         params.suppress_last_postfix = true;
         params.file_extension = ".ts";
     } else if (lang == "rb") {
@@ -388,8 +403,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "data = [";
-        params.footer = "]";
+        params.header = STRLINE("data = [");
+        params.footer = STRLINE("]");
         params.suppress_last_postfix = true;
         params.file_extension = ".rb";
     } else if (lang == "php") {
@@ -397,8 +412,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "$data = [";
-        params.footer = "];";
+        params.header = STRLINE("$data = [");
+        params.footer = STRLINE("];");
         params.suppress_last_postfix = true;
         params.file_extension = ".php";
     } else if (lang == "lua") {
@@ -406,8 +421,8 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = ' ';
         params.prefix = "0x";
         params.postfix = ",";
-        params.header = "local data = {";
-        params.footer = "}";
+        params.header = STRLINE("local data = {");
+        params.footer = STRLINE("}");
         params.suppress_last_postfix = true;
         params.file_extension = ".lua";
     } else if (lang == "url") {
@@ -415,28 +430,29 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         params.separator = '\0'; // No separator
         params.prefix = "%"; // URL encoding prefix
         params.postfix = ""; // No postfix
-        params.header = "";
+        params.header = "http://";
         params.footer = "";
         params.suppress_last_postfix = false;
-        params.file_extension = "";   
+        params.file_extension = "";
+        params.max_columns = 0;
     } else if (lang == "bat") {
-        // Settings for URL format
+        // Settings for BAT format
         params.separator = ' '; // No separator
         params.prefix = ""; // URL encoding prefix
         params.postfix = ""; // No postfix
         params.header = 
-		"  :BEGIN"
-		  "  @ECHO OFF\n"
-		  "  SET /P filename=\"Enter filename: \"\n"
-		  "  SET tmpfile=%~d0%~p0%RANDOM%.tmp\n"
-		  "  SET outfile=%~d0%~p0%filename%\n"
-		  "  ECHO tmpfile = %tmpfile%\n"
-		  "  ECHO outfile = %outfile%\n"
-		  "  FINDSTR \"^[0-9A-F][0-9A-F][^\\s]\" %0 > \"%tmpfile%\"\n"
-		  "  certutil -decodehex \"%tmpfile%\" \"%outfile%\"\n"
-		  "  TIMEOUT 3\n"
-		  "  DEL /F /Q \"%tmpfile%\" %0\n"
-		  "  EXIT\n";
+            STRLINE(":BEGIN\n") +
+            STRLINE("@ECHO OFF") +
+            STRLINE("SET /P filename=\"Enter filename: \"") +
+            STRLINE("SET tmpfile=%~d0%~p0%RANDOM%.tmp") +
+            STRLINE("SET outfile=%~d0%~p0%filename%") +
+            STRLINE("ECHO tmpfile = %tmpfile%") +
+            STRLINE("ECHO outfile = %outfile%") +
+            STRLINE("FINDSTR \"^[0-9A-F][0-9A-F][^\\s]\" %0 > \"%tmpfile%\"") +
+            STRLINE("certutil -decodehex \"%tmpfile%\" \"%outfile%\"") +
+            STRLINE("TIMEOUT 3") +
+            STRLINE("DEL /F /Q \"%tmpfile%\" %0") +
+            STRLINE("EXIT") + NEWLINE;
         params.footer = "";
         params.suppress_last_postfix = false;
         params.file_extension = ".bat";
@@ -445,6 +461,7 @@ void set_language_settings(const std::string& lang, Parameters& params) {
         exit(1);
     }
 }
+
 
 int main(int argc, char* argv[]) {
     Parameters params;
@@ -456,7 +473,7 @@ int main(int argc, char* argv[]) {
     params.header = ""; // Header for the entire output
     params.footer = ""; // Footer for the entire output
     params.suppress_last_postfix = false; // Suppress postfix for the last byte
-    std::istream* input = &std::cin; // Default input from stdin
+    std::istream* input = is_stdin_redirected() ? &std::cin : nullptr; // Default input from stdin
     std::ostream* output = &std::cout; // Default output to stdout
     std::string text_input; // For storing text after -t or -text option
     std::string file_name; // For storing file name after -f or -file option
@@ -469,11 +486,6 @@ int main(int argc, char* argv[]) {
 
     std::set<std::string> seen_options;
     
-    /*if (argc == 1){
-        print_help(argv[0], params.max_chars);
-        return 0;		
-	}*/
-
     // Parse command-line arguments
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
@@ -704,15 +716,6 @@ int main(int argc, char* argv[]) {
             return 1;
         }
     }
-
-#ifdef DEBUG
-    // Debug information
-    std::cerr << "Input source: " << (input == &std::cin ? "stdin" : (dynamic_cast<std::ifstream*>(input) ? "file" : "text")) << std::endl;
-    std::cerr << "Output destination: " << (output == &std::cout ? "stdout" : (dynamic_cast<std::ofstream*>(output) ? "file" : "unknown")) << std::endl;
-    std::cerr << "Encode mode: " << (params.encode_mode ? "true" : "false") << std::endl;
-    std::cerr << "Separator: '" << params.separator << "'" << std::endl;
-#endif
-
     try {
         if (interactive_mode) {
             std::stringstream buffer;
@@ -722,7 +725,11 @@ int main(int argc, char* argv[]) {
             }
             std::istringstream input_stream(buffer.str());
             handle_input(input_stream, *output, params);
-        } else {
+            
+        } else { if (input == nullptr){
+		        print_help(argv[0], params.max_chars);
+		        return 0;		
+			}
             handle_input(*input, *output, params);
         }
     } catch (const std::exception& e) {
